@@ -11,6 +11,8 @@ Upload one photo · pick a look · download a LinkedIn-ready portrait that still
 [![OpenAI](https://img.shields.io/badge/OpenAI-Image%20API-412991?style=for-the-badge&logo=openai&logoColor=white)](https://platform.openai.com/docs/guides/image-generation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22d3ee?style=for-the-badge)](LICENSE)
 
+**[▶ Try the live demo](https://barq360.ae/headshot-studio)**
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/heshamhussin961-design/headshot-studio&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20key%20with%20image%20access)
 
 </div>
@@ -52,6 +54,8 @@ npm run dev                  # http://localhost:3000
 | `OPENAI_API_KEY` | ✅ | — | Needs access to the image model |
 | `OPENAI_IMAGE_MODEL` | | `gpt-image-1` | Any OpenAI model that supports `/v1/images/edits` |
 | `OPENAI_IMAGE_QUALITY` | | `high` | `low` / `medium` / `high` — trades cost for detail |
+| `DAILY_LIMIT` | | off | Max images per day — protects your key on a public demo |
+| `NEXT_PUBLIC_BASE_PATH` | | — | Serve under a sub-path, e.g. `/headshot-studio` |
 
 ## 🧠 How it works
 

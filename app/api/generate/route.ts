@@ -5,6 +5,19 @@ export const maxDuration = 120;
 
 const MAX_BYTES = 8 * 1024 * 1024;
 
+// Optional spend guard for public demos: DAILY_LIMIT images per UTC day (per server process).
+const usage = { day: "", count: 0 };
+function overDailyLimit(): boolean {
+  const limit = Number(process.env.DAILY_LIMIT || 0);
+  if (!limit) return false;
+  const today = new Date().toISOString().slice(0, 10);
+  if (usage.day !== today) {
+    usage.day = today;
+    usage.count = 0;
+  }
+  return usage.count >= limit;
+}
+
 const STYLES: Record<string, string> = {
   corporate:
     "a navy or charcoal tailored suit with a crisp shirt, soft neutral grey studio backdrop, classic corporate headshot",
@@ -30,6 +43,10 @@ export async function POST(req: NextRequest) {
   const key = process.env.OPENAI_API_KEY;
   if (!key) {
     return NextResponse.json({ error: "Server is missing OPENAI_API_KEY." }, { status: 500 });
+  }
+
+  if (overDailyLimit()) {
+    return NextResponse.json({ error: "Today's free demo quota is used up — try again tomorrow, or deploy your own copy." }, { status: 429 });
   }
 
   const form = await req.formData();
@@ -64,6 +81,7 @@ export async function POST(req: NextRequest) {
     const msg = data?.error?.message || `Generation failed (${res.status}).`;
     return NextResponse.json({ error: msg }, { status: 502 });
   }
+  usage.count += 1;
   const b64 = data?.data?.[0]?.b64_json;
   if (!b64) {
     return NextResponse.json({ error: "No image returned." }, { status: 502 });

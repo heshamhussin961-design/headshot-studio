@@ -34,7 +34,7 @@ export default function Home() {
     body.append("photo", file);
     body.append("style", style);
     try {
-      const res = await fetch("/api/generate", { method: "POST", body });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/api/generate`, { method: "POST", body });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong.");
       setResult(data.image);
